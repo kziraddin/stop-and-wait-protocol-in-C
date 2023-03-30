@@ -1,48 +1,23 @@
-# stop-and-wait-protocol-in-C
+STOP AND WAIT PROTOCOL implementation in C:
 
-Overview 
+The Stop-and-Wait protocol is a simple flow control mechanism used in communication networks, particularly in telecommunications and computer networks. It is a half-duplex protocol that ensures reliable delivery of data by transmitting a data frame and waiting for an acknowledgement (ACK) message from the receiver before transmitting the next frame.
 
-In this laboratory programming assignment, you will be writing the sending and receiving transport-level code 
-for implementing a simple reliable data transfer protocol. There are two versions of this lab, 
-the Alternating-Bit-Protocol version and the Pipelining version: the Go-Back-N version, and the Selective Repeat version. 
-This lab should be fun since your implementation will differ very little from what would be required in a real-world situation. 
-For our simulation, we assume that sender is sending the following message cited from a song – “Twinkle, twinkle little star”.  
+Here is how the Stop-and-Wait protocol works:
 
+The sender sends a frame to the receiver.
 
-Twinkle, twinkle little star. 
-How I wonder what you are. Up above the world so high. 
-Like a diamond in the sky. 
-Twinkle, twinkle little star. 
-How I wonder what you are. 
-Twinkle, twinkle little star. 
-How I wonder what you are. Up above the world so high. 
-Like a diamond in the sky. 
-Twinkle, twinkle little star. 
-How I wonder what you are. 
+The sender waits for an acknowledgement (ACK) message from the receiver.
 
-*Each word will be processed into a packet with a sequence number.
-  
-The routines you will write 
-The procedures you will write are for the sending entity (A), ‘Sender’ and the receiving entity (B), ‘Receiver’.  
-Only unidirectional transfer of data (from A to B) is required. Of course, the B side will have to send packets 
-to A to acknowledge (positively) receipt of data.  
-The unit of data passed between sender and receiver is the packet, which is declared as: 
+If the sender does not receive an ACK within a certain time interval, it retransmits the same frame.
 
-struct pkt { 
-   int seqnum;    
-   int acknum; 
-   char payload[20]; 
-}; 
+If the sender receives an ACK message, it sends the next frame.
 
-*For simplifying our project, We do not implement Checksum for our data transfer protocols. 
+The receiver receives the frame and sends an ACK message back to the sender.
 
+If the receiver detects an error in the frame, it discards the frame and sends a negative acknowledgement (NAK) message back to the sender.
 
+If the sender receives a NAK message, it retransmits the same frame.
 
-The (Stop-and-Wait) Alternating-Bit-Protocol Version of this lab. You are simulating rdt3.0Protocol:  
-channels with errors and loss new assumption: underlying channel can also lose packets (data, ACKs) 
-	* checksum, seq. #, ACKs, retransmissions will be of help … but not enough 
+The process continues until all frames are successfully transmitted and acknowledged.
 
-approach: sender waits “reasonable” amount of time for ACK  
-* retransmits if no ACK received in this time, if pkt (or ACK) just delayed (not lost) 
-* retransmission will be duplicate, but seq. #’s already handles this  
-* receiver must specify seq # of pkt being ACKed, requires countdown timer 
+The Stop-and-Wait protocol is a very simple and reliable protocol, but it has some limitations. One of the main limitations is its low efficiency, as the sender can only transmit one frame at a time and must wait for an ACK before sending the next frame. This protocol is best suited for situations where the data transmission rate is low, and the transmission distance is short.
